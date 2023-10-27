@@ -12,8 +12,10 @@ namespace TextilTech {
       builder.Services.AddEndpointsApiExplorer();
       builder.Services.AddSwaggerGen();
 
-      builder.Services.AddEntityFrameworkSqlServer().AddDbContext<DatabaseContext>(
-        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+      builder.Services.AddDbContextPool<DatabaseContext>(
+        options => options.UseNpgsql(builder.Configuration
+          .GetConnectionString("DataBase")
+        )
       );
 
       builder.Services.AddScoped<IUsersRepository, UsersRepository>();

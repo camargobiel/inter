@@ -1,13 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using TextilTech.Models;
+using TextilTech.Repositories.Interfaces;
 
 namespace TextilTech.Controllers {
   [Route("api/[Controller]")]
   [ApiController]
   public class UserController: ControllerBase {
-    [HttpGet]
-    public ActionResult<UserModel> GetSingleUser(string id) {
-      return Ok(id);
+    private readonly IUsersRepository _userRepository;
+    public UserController(IUsersRepository userRepository) {
+      _userRepository = userRepository;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserModel>> GetSingleUser(int id) {
+      UserModel? user = await _userRepository.FindOne(id);
+      return Ok(user);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<UserModel>> CreateUser(UserModel user) {
+      UserModel? createdUser = await _userRepository.Create(user);
+      return Ok(createdUser);
     }
   }
 }

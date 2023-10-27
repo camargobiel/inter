@@ -10,11 +10,14 @@ namespace TextilTech.Repositories {
       _context = context;
     }
     public async Task<UserModel> Create(UserModel user) {
-      throw new NotImplementedException();
+      await _context.Users.AddAsync(user);
+      await _context.SaveChangesAsync();
+      return user;
     }
 
-    public async Task<UserModel> Read(int id) {
-      return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+    public async Task<UserModel?> FindOne(int id) {
+      UserModel? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+      return user;
     }
   }
 }

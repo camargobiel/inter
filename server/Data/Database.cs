@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TextilTech.Data.Map;
 using TextilTech.Models;
 
 namespace TextilTech.Data {
@@ -11,6 +12,10 @@ namespace TextilTech.Data {
     public DbSet<ProductModel> Products { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
+      modelBuilder.ApplyConfiguration(new UserMap());
+      modelBuilder.ApplyConfiguration(new ProductMap());
+      modelBuilder.ApplyConfiguration(new CustomerMap());
+      modelBuilder.ApplyConfiguration(new SellMap());
       base.OnModelCreating(modelBuilder);
     }
   }
