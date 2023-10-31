@@ -19,6 +19,7 @@ namespace TextilTech.Controllers {
 
     [HttpPost]
     public async Task<ActionResult<UserModel>> CreateUser(UserModel user) {
+      user.Id = new Random().Next(1, 1000);
       UserModel? createdUser = await _userRepository.Create(user);
       return Ok(createdUser);
     }
