@@ -5,6 +5,13 @@ const theme = createTheme({
     primary: {
       main: "#2563eb",
     },
+    secondary: {
+      main: "#ED6812",
+    },
+    text: {
+      primary: "#000000",
+      secondary: "#757575",
+    },
     error: {
       main: "#eb2563",
     }

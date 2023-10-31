@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button, IconButton, TextField } from '@mui/material';
-import login from '../../assets/images/login.svg'
+import login from '../../assets/svgs/login.svg'
 import { ArrowForwardRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import { validationSchema } from './validation';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormError from '../../components/FormError/FormError';
-import theme from '../../theme';
 
 const Login = () => {
   const {
@@ -16,7 +15,12 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
-  console.log('errors', errors)
+
+  const success = window.location.href.includes('?success=true');
+
+  React.useEffect(() => {
+    document.title = 'Login';
+  }, []);
 
   const submit = (data: any) => {
     console.log('data', data)
@@ -30,7 +34,7 @@ const Login = () => {
 
   return (
     <form className="grid grid-cols-2 w-screen" onSubmit={handleSubmit(submit)}>
-      <img src={login} className='object-contain h-screen' />
+      <img src={login} className='object-contain h-screen' alt="model in a model shoot" />
       <section className='flex flex-col justify-center items-center'>
         <div className="flex flex-col	gap-3 w-2/4">
           <h1 className="text-3xl font-medium text-blue-600	mb-5">
@@ -92,7 +96,7 @@ const Login = () => {
             Entrar
           </Button>
           <p className="text-sm text-gray-500 mt-2">
-            Não tem uma conta? <a href="#" className="text-blue-600">Cadastre-se</a>
+            Não tem uma conta? <a href="/cadastro" className="text-blue-600">Cadastre-se</a>
           </p>
         </div>
       </section>

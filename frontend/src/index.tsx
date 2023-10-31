@@ -4,14 +4,22 @@ import './index.css';
 import App from './App';
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <ThemeProvider theme={theme}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ThemeProvider>
+  <QueryClientProvider client={queryClient}>
+    <ToastContainer position='bottom-right' autoClose={5000} />
+    <ThemeProvider theme={theme}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </ThemeProvider>
+  </QueryClientProvider>
 );

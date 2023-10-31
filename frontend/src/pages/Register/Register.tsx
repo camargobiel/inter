@@ -1,13 +1,20 @@
 import React from 'react';
 import { Button, IconButton, TextField } from '@mui/material';
-import register from '../../assets/images/register.svg'
+import register from '../../assets/svgs/register.svg'
 import { ArrowForwardRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import { validationSchema } from './validation';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormError from '../../components/FormError/FormError';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { CreateUserParams } from '../../types/CreateUserParams';
+import loadingGif from '../../assets/svgs/loading.svg';
 
 const Register = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+
   const {
     control,
     handleSubmit,
@@ -15,14 +22,28 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
-  console.log('errors', errors)
 
-  const submit = (data: any) => {
-    console.log('data', data)
+  const mutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await axios.post('http://localhost:5000/api/User', data).then((res) => res.data);
+    },
+    onSuccess: (data) => {
+      window.location.href = '/login';
+    }
+  })
+
+  React.useEffect(() => {
+    document.title = 'Cadastro';
+  }, []);
+
+  const submit = (data: CreateUserParams) => {
+    mutation.mutate({
+      id: 100,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    })
   }
-
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   return (
     <form className="grid grid-cols-2 w-screen" onSubmit={handleSubmit(submit)}>
@@ -123,10 +144,10 @@ const Register = () => {
                     endAdornment: (
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={() => setShowConfirmPassword(!showPassword)}
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility  />}
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility  />}
                       </IconButton>
                     )
                   }
@@ -139,15 +160,15 @@ const Register = () => {
             type="submit"
             variant="contained"
             endIcon={
-              <ArrowForwardRounded />
+              mutation.isLoading ? <></> :<ArrowForwardRounded />
             }
             color='primary'
             className="h-12"
           >
-            Cadastrar
+            {mutation.isLoading ? <img className='w-7' src={loadingGif} alt='loading' /> : "Cadastrar"}
           </Button>
           <p className="text-sm text-gray-500 mt-2">
-            Já tem uma conta? <a href="#" className="text-blue-600">Faça o login</a>
+            Já tem uma conta? <a href="/login" className="text-blue-600">Faça o login</a>
           </p>
         </div>
       </section>
