@@ -6,24 +6,42 @@ import { validationSchema } from './validation';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormError from '../../components/FormError/FormError';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { ApiError } from '../../types/ApiError';
 
 const Login = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setError,
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
 
-  const success = window.location.href.includes('?success=true');
+  const mutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await axios.post('http://localhost:5000/api/User/auth', data).then((res) => res.data);
+    },
+    onSuccess: (data) => {
+      console.log('data', data)
+    },
+    onError: (error: ApiError) => {
+      if (error.response.status === 404) {
+        setError("email", {
+          message: "Usuário não registrado"
+        })
+      }
+    }
+  })
 
   React.useEffect(() => {
     document.title = 'Login';
   }, []);
 
   const submit = (data: any) => {
-    console.log('data', data)
+    mutation.mutate(data);
   }
 
   const [showPassword, setShowPassword] = React.useState(false);

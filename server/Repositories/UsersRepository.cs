@@ -15,8 +15,13 @@ namespace TextilTech.Repositories {
       return user;
     }
 
-    public async Task<UserModel?> FindOne(int id) {
+    public async Task<UserModel?> FindOneById(int id) {
       UserModel? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+      return user;
+    }
+
+    public async Task<UserModel?> FindOneByEmail(string email) {
+      UserModel? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
       return user;
     }
   }
