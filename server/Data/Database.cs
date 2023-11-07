@@ -10,6 +10,7 @@ namespace TextilTech.Data {
     public DbSet<CustomerModel> Customers { get; set; }
     public DbSet<SellModel> Sells { get; set; }
     public DbSet<ProductModel> Products { get; set; }
+    public DbSet<CompanyModel> Companies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.ApplyConfiguration(new UserMap());
