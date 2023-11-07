@@ -1,8 +1,7 @@
-const DashboardPage = () => {
+export const Dashboard = () => {
   return (
-    <div>
+    <div style={{backgroundColor: "blue", marginTop: "60px"}}>
+        asdasdasdsadasdasds
     </div>
   );
 }
-
-export default DashboardPage;

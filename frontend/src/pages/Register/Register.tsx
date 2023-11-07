@@ -10,15 +10,20 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { CreateUserParams } from '../../types/CreateUserParams';
 import loadingGif from '../../assets/svgs/loading.svg';
+import { toast } from 'react-toastify';
+import { ApiError } from '../../types/ApiError';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const navigate = useNavigate()
 
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
@@ -28,7 +33,18 @@ const Register = () => {
       return await axios.post('http://localhost:5000/api/User', data).then((res) => res.data);
     },
     onSuccess: (data) => {
-      window.location.href = '/login';
+      toast.success("Conta criada com sucesso!", {
+        hideProgressBar: true,
+        theme: "colored",
+      })
+      navigate("/login")
+    },
+    onError: ({ response }: ApiError) => {
+      if (response.status === 409) {
+        setError("email", {
+          message: "E-mail já cadastrado, tente outro ou faça o login."
+        })
+      }
     }
   })
 
@@ -38,10 +54,10 @@ const Register = () => {
 
   const submit = (data: CreateUserParams) => {
     mutation.mutate({
-      id: 100,
       name: data.name,
       email: data.email,
       password: data.password,
+      companyName: data.companyName
     })
   }
 

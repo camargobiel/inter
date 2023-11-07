@@ -9,6 +9,8 @@ import FormError from '../../components/FormError/FormError';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { ApiError } from '../../types/ApiError';
+import { AuthenticationService } from '../../services/AuthenticationService';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const {
@@ -19,13 +21,16 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
+  const navigate = useNavigate()
 
   const mutation = useMutation({
     mutationFn: async (data: any) => {
       return await axios.post('http://localhost:5000/api/User/auth', data).then((res) => res.data);
     },
     onSuccess: (data) => {
-      console.log('data', data)
+      AuthenticationService.saveToken(data.token);
+      AuthenticationService.saveUser(data.user);
+      navigate("/dashboard")
     },
     onError: (error: ApiError) => {
       if (error.response.status === 404) {
