@@ -8,7 +8,7 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using TextilTech.UseCases.User;
-using Microsoft.AspNetCore.Http.HttpResults;
+using TextilTech.Errors;
 
 namespace TextilTech.Controllers {
   [Route("api/[Controller]")]
@@ -33,6 +33,8 @@ namespace TextilTech.Controllers {
       if (existentUser == null) {
         return NotFound();
       }
+      if (user.Password != existentUser.Password) return Unauthorized();
+
       UserTokenEntity token = BuildToken(user);
       return new OkObjectResult(new {
         token = token.Token,

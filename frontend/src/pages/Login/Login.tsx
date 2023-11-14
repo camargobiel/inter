@@ -11,6 +11,7 @@ import axios from 'axios';
 import { ApiError } from '../../types/ApiError';
 import { AuthenticationService } from '../../services/AuthenticationService';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const {
@@ -28,6 +29,10 @@ const Login = () => {
       return await axios.post('http://localhost:5000/api/User/auth', data).then((res) => res.data);
     },
     onSuccess: (data) => {
+      toast.success('Login realizado com sucesso!', {
+        hideProgressBar: true,
+        theme: "colored",
+      });
       AuthenticationService.saveToken(data.token);
       AuthenticationService.saveUser(data.user);
       navigate("/dashboard")
@@ -36,6 +41,11 @@ const Login = () => {
       if (error.response.status === 404) {
         setError("email", {
           message: "Usuário não registrado"
+        })
+      }
+      if (error.response.status === 401) {
+        setError("password", {
+          message: "Senha incorreta, tente outra ou cadastre-se"
         })
       }
     }

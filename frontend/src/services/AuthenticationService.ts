@@ -20,6 +20,15 @@ class AuthenticationService {
   public static getUser(): UserModel {
     return JSON.parse(sessionStorage.getItem('user') || "{}");
   }
+
+  public static removeUser() {
+    return sessionStorage.removeItem('user');
+  }
+
+  public static logout() {
+    this.removeToken();
+    this.removeUser();
+  }
 }
 
 export { AuthenticationService }
