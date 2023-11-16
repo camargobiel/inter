@@ -41,8 +41,13 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <div className="mt-24 w-full flex justify-between items-center mx-auto">
-      <div className="w-96 ">
+    <div className="p-12 mt-24 w-full flex justify-between items-center mx-auto">
+      <div className="w-96 flex flex-col items-center border p-5 rounded-md shadow-md">
+        <h2 className="mb-5 text-xl font-medium text-blue-600">Vendas por categorias</h2>
+        <Pie data={data} />
+      </div>
+      <div className="w-96 flex flex-col items-center border p-5 rounded-md shadow-md">
+        <h2 className="mb-5 text-xl font-medium text-blue-600">Vendas por categorias</h2>
         <Pie data={data} />
       </div>
     </div>
