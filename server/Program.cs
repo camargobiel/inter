@@ -29,6 +29,7 @@ namespace TextilTech {
 
       builder.Services.AddScoped<IUsersRepository, UsersRepository>();
       builder.Services.AddScoped<ICompaniesRepository, CompaniesRepository>();
+      builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 
       var app = builder.Build();
       app.UseSwagger();

@@ -11,6 +11,8 @@ namespace TextilTech.Data.Map {
       builder.Property(x => x.Size).HasMaxLength(10);
       builder.Property(x => x.Price).IsRequired().HasMaxLength(255);
       builder.Property(x => x.Category).HasMaxLength(255);
+      builder.Property(x => x.NCM).HasMaxLength(8);
+      builder.Property(x => x.Reference).HasMaxLength(255);
     }
   }
 }

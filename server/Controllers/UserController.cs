@@ -8,7 +8,6 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using TextilTech.UseCases.User;
-using TextilTech.Errors;
 
 namespace TextilTech.Controllers {
   [Route("api/[Controller]")]

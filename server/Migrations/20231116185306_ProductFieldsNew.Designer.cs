@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TextilTech.Data;
@@ -11,9 +12,11 @@ using TextilTech.Data;
 namespace TextilTech.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20231116185306_ProductFieldsNew")]
+    partial class ProductFieldsNew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,6 +88,7 @@ namespace TextilTech.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("NCM")
+                        .IsRequired()
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)");
 
@@ -98,6 +102,7 @@ namespace TextilTech.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("Reference")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
