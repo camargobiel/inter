@@ -1,7 +1,6 @@
-import { Checkroom, ExitToApp, SearchOutlined } from "@mui/icons-material"
+import { Checkroom, ExitToApp } from "@mui/icons-material"
 import theme from "../../theme"
 import { useLocation } from 'react-router-dom';
-import { TextField } from "@mui/material";
 import { AuthenticationService } from "../../services/AuthenticationService";
 import { toast } from "react-toastify";
 
@@ -37,23 +36,6 @@ const Navbar = () => {
           <div
             className="flex items-center gap-5 w-fit"
           >
-            <TextField
-              autoComplete="off"
-              variant="outlined"
-              size="small"
-              className="w-3/6"
-              color="info"
-              placeholder="Pesquisar por um produto"
-              InputProps={{
-                style: {
-                  color: "white",
-                },
-                endAdornment: (
-                  <SearchOutlined />
-                )
-              }}
-              focused
-            />
             <div
               className="flex items-center gap-1"
             >

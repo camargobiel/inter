@@ -29,10 +29,7 @@ const Login = () => {
       return await axios.post('http://localhost:5000/api/User/auth', data).then((res) => res.data);
     },
     onSuccess: (data) => {
-      toast.success('Login realizado com sucesso!', {
-        hideProgressBar: true,
-        theme: "colored",
-      });
+      toast.success('Login realizado com sucesso!');
       AuthenticationService.saveToken(data.token);
       AuthenticationService.saveUser(data.user);
       navigate("/dashboard")

@@ -33,10 +33,7 @@ const Register = () => {
       return await axios.post('http://localhost:5000/api/User', data).then((res) => res.data);
     },
     onSuccess: (data) => {
-      toast.success("Conta criada com sucesso!", {
-        hideProgressBar: true,
-        theme: "colored",
-      })
+      toast.success("Conta criada com sucesso!")
       navigate("/login")
     },
     onError: ({ response }: ApiError) => {
