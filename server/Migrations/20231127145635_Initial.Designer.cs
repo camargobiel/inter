@@ -12,8 +12,8 @@ using TextilTech.Data;
 namespace TextilTech.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231116185306_ProductFieldsNew")]
-    partial class ProductFieldsNew
+    [Migration("20231127145635_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,11 +44,11 @@ namespace TextilTech.Migrations
 
             modelBuilder.Entity("TextilTech.Models.CustomerModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer");
@@ -88,7 +88,6 @@ namespace TextilTech.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("NCM")
-                        .IsRequired()
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)");
 
@@ -102,7 +101,6 @@ namespace TextilTech.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("Reference")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -113,6 +111,25 @@ namespace TextilTech.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("TextilTech.Models.ProductsSellModel", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductId"));
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SellId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProductId");
+
+                    b.ToTable("ProductsSellModel");
                 });
 
             modelBuilder.Entity("TextilTech.Models.SellModel", b =>
@@ -126,9 +143,6 @@ namespace TextilTech.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
@@ -136,9 +150,6 @@ namespace TextilTech.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");

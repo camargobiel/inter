@@ -12,8 +12,8 @@ using TextilTech.Data;
 namespace TextilTech.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231127130229_SellModelImprovement")]
-    partial class SellModelImprovement
+    [Migration("20231127190958_Sells")]
+    partial class Sells
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,20 +143,20 @@ namespace TextilTech.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Identifier")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
 
                     b.Property<float>("TotalPrice")
                         .HasColumnType("real");

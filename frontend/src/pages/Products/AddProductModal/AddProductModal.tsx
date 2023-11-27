@@ -111,7 +111,7 @@ export const AddProductModal = ({ open, setOpen }: AddProductModalProps) => {
           <div className="flex flex-col gap-5">
             {
               form.slice(4, 7).map(({ id, label, placeholder }) => (
-                <div key={id}>
+                <div key={id} className="flex flex-col">
                   <Controller
                     name={id}
                     control={control}

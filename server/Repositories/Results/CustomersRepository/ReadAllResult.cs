@@ -1,5 +1,3 @@
-using TextilTech.Models;
-
 namespace TextilTech.Repositories.Results.CustomersRepository {
   public class ReadAllResult {
     public int? Id { get; set; }

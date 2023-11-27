@@ -12,8 +12,8 @@ using TextilTech.Data;
 namespace TextilTech.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231116215342_ProductFieldsCorrect")]
-    partial class ProductFieldsCorrect
+    [Migration("20231127192359_Sells2")]
+    partial class Sells2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,11 +44,11 @@ namespace TextilTech.Migrations
 
             modelBuilder.Entity("TextilTech.Models.CustomerModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer");
@@ -113,6 +113,25 @@ namespace TextilTech.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("TextilTech.Models.ProductsSellModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SellId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductsSells");
+                });
+
             modelBuilder.Entity("TextilTech.Models.SellModel", b =>
                 {
                     b.Property<int>("Id")
@@ -130,16 +149,14 @@ namespace TextilTech.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
 
                     b.Property<float>("TotalPrice")
                         .HasColumnType("real");

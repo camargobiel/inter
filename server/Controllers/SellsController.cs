@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using TextilTech.Controllers.Models;
 using TextilTech.Models;
 using TextilTech.Repositories.Inputs;
 using TextilTech.Repositories.Interfaces;
-using TextilTech.Repositories.Results.CustomersRepository;
+using TextilTech.Repositories.Results.SellsRepository;
+using TextilTech.UseCases.Sell;
 
 namespace TextilTech.Repositories {
   [Route("api/[Controller]")]
@@ -18,15 +20,16 @@ namespace TextilTech.Repositories {
     }
 
     [HttpGet("/api/sells")]
-    public async Task<ActionResult<List<SellModel>>> GetSells(ReadAllSellsInput? input) {
-      List<SellModel> result = await _sellsRepository.ReadAll(input);
+    public async Task<ActionResult<List<ReadAllSellsResult>>> GetSells(ReadAllSellsInput? input) {
+      List<ReadAllSellsResult> result = await _sellsRepository.ReadAll(input);
       return Ok(result);
     }
 
 
     [HttpPost("/api/sells")]
-    public async Task<ActionResult<SellModel>> CreateSell(SellModel sell) {
-      SellModel result = await _sellsRepository.Create(sell);
+    public async Task<ActionResult<SellModel>> CreateSell(CreateSellParams sell) {
+      CreateSellUseCase useCase = new(_sellsRepository);
+      SellModel result = await useCase.Execute(sell);
       return Ok(result);
     }
   }
