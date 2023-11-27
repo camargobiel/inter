@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { AuthenticationService } from "../../../services/AuthenticationService";
+import { MoneyMaskInput } from "../../../components/InputMasks/MoneyMask";
 
 type AddProductModalProps = {
   open: boolean;
@@ -58,7 +59,13 @@ export const AddProductModal = ({ open, setOpen }: AddProductModalProps) => {
 
   return (
     <ModalComponent handleClose={() => setOpen(false)} open={open}>
-      <form className="p-5" onSubmit={handleSubmit(submit)}>
+      <form className="p-5" onSubmit={handleSubmit(submit)} onKeyDown={
+        (e) => {
+          if (e.key === 'Enter') {
+            handleSubmit(submit)();
+          }
+        }
+      }>
         <div className="flex items-center justify-between mb-10">
           <h2 className="text-lg font-medium text-blue-600">Criar novo produto</h2>
           <Close
@@ -92,6 +99,7 @@ export const AddProductModal = ({ open, setOpen }: AddProductModalProps) => {
                       error={Boolean(errors[id]?.message)}
                       InputProps={{
                         startAdornment: value ? startAdornment : undefined,
+                        inputComponent: id === 'price' ? MoneyMaskInput as any : undefined
                       }}
                     />
                   )}

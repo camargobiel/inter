@@ -6,6 +6,8 @@ import Home from "../../pages/Home/Home";
 import { AuthenticationService } from "../../services/AuthenticationService";
 import { Dashboard } from "../../pages/Dashboard/Dashboard";
 import { Products } from "../../pages/Products/Products";
+import { Customers } from "../../pages/Customers/Customers";
+import { Purchases } from "../../pages/Purchases/Purchases";
 
 export const AllRoutes = () => {
   const user = AuthenticationService.getUser();
@@ -22,6 +24,8 @@ export const AllRoutes = () => {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/produtos" element={<Products />} />
+          <Route path="/clientes" element={<Customers />} />
+          <Route path="/vendas" element={<Purchases />} />
         </Routes>
       )}
     </Router>
