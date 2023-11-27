@@ -1,4 +1,7 @@
 export interface PurchaseModel {
   id: number;
-  name: string;
+  identifier: string;
+  paymentMethod: string;
+  totalPrice: number;
+  date: string;
 }

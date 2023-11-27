@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export type Form = {
-  id: "totalPrice" | "date"  | "paymentMethod" | "products" | "customers";
+  id: "totalPrice" | "date"  | "paymentMethod" | "products" | "customer" | "identifier";
   label: string;
   placeholder: string;
   disabled?: boolean;
@@ -12,11 +12,9 @@ export type Form = {
 
 export const form: Form[] = [
   {
-    id: "totalPrice",
-    label: "Preço total*",
-    placeholder: "Ex. R$ 10,00",
-    disabled: true,
-    defaultValue: 0,
+    id: "identifier",
+    label: "Identificador *",
+    placeholder: "Ex. 1, ABC123",
   },
   {
     id: "date",
@@ -41,11 +39,17 @@ export const form: Form[] = [
     multi: true,
   },
   {
-    id: "customers",
+    id: "customer",
     label: "Clientes*",
     placeholder: "Ex. Camiseta, calça, tênis",
     type: "select",
     defaultValue: [],
-    multi: true,
-  }
+  },
+  {
+    id: "totalPrice",
+    label: "Preço total*",
+    placeholder: "Ex. R$ 10,00",
+    disabled: true,
+    defaultValue: 0,
+  },
 ]

@@ -20,8 +20,9 @@ type Data = {
   totalPrice: number;
   date: string;
   paymentMethod: string;
-  products: (string | undefined)[];
-  customers: (string | undefined)[];
+  products: string[];
+  customer: string;
+  identifier: string;
 };
 
 const ITEM_HEIGHT = 48;
@@ -72,10 +73,13 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
 
   const submit = (data: Data) => {
     mutation.mutate({
-      ...data,
+      identifier: data.identifier,
       companyId: user?.companyId,
-      products: data.products.map((product) => parseInt(product as string)),
-      date: new Date(data.date).toISOString()
+      paymentMethod: data.paymentMethod,
+      totalPrice: data.totalPrice,
+      date: new Date(data.date).toISOString(),
+      customerId: parseInt(data.customer),
+      productsIds: data.products.map((id) => parseInt(id))
     })
   }
 
@@ -88,7 +92,7 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
   }
 
   return (
-    <ModalComponent handleClose={() => setOpen(false)} open={open} width={700}>
+    <ModalComponent handleClose={() => setOpen(false)} open={open} width={800}>
       <form onSubmit={handleSubmit(submit)} onKeyDown={
         (e) => {
           if (e.key === 'Enter') {
@@ -109,53 +113,47 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
             }
           />
         </div>
-        <div className="flex gap-5">
+        <div className="flex gap-5 w-full">
           <div className="flex flex-col gap-5 w-full">
             {form.slice(0, 3).map(({ id, label, placeholder, disabled, type, defaultValue }) => (
-              <div key={id} className="w-full">
+              <div key={id} className="w-full flex flex-col gap-2">
                 <Controller
                   name={id}
                   defaultValue={defaultValue}
                   control={control}
                   render={({ field: { value, onChange } }) => (
                     type === "select" ? (
-                      <>
-                        <Select
-                          value={value}
-                          onChange={(e) => onChange(e.target.value)}
-                          placeholder={placeholder}
-                          error={Boolean(errors[id]?.message)}
-                        >
-                          <MenuItem value="creditCard">Cartão de crédito</MenuItem>
-                          <MenuItem value="debitCard">Cartão de débito</MenuItem>
-                          <MenuItem value="pix">Pix</MenuItem>
-                          <MenuItem value="money">Dinheiro</MenuItem>
-                        </Select>
-                        <FormError>{errors[id]?.message}</FormError>
-                      </>
+                      <Select
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        placeholder={placeholder}
+                        error={Boolean(errors[id]?.message)}
+                      >
+                        <MenuItem value="creditCard">Cartão de crédito</MenuItem>
+                        <MenuItem value="debitCard">Cartão de débito</MenuItem>
+                        <MenuItem value="pix">Pix</MenuItem>
+                        <MenuItem value="money">Dinheiro</MenuItem>
+                      </Select>
                     ) : (
-                      <>
-                        <TextField
-                          value={
-                            value
-                          }
-                          onChange={(e) => {
-                            onChange(e.target.value)
-                          }}
-                          label={label}
-                          placeholder={placeholder}
-                          error={Boolean(errors[id]?.message)}
-                          className="w-full"
-                          disabled={disabled}
-                          type={type}
-                          InputProps={{
-                            startAdornment: id === "totalPrice" ? (
-                              <span className="text-gray-400 mr-2">R$ </span>
-                            ) : null
-                          }}
-                        />
-                        <FormError>{errors[id]?.message}</FormError>
-                      </>
+                      <TextField
+                        value={
+                          value
+                        }
+                        onChange={(e) => {
+                          onChange(e.target.value)
+                        }}
+                        label={label}
+                        placeholder={placeholder}
+                        error={Boolean(errors[id]?.message)}
+                        className="w-full"
+                        disabled={disabled}
+                        type={type}
+                        InputProps={{
+                          startAdornment: id === "totalPrice" ? (
+                            <span className="text-gray-400 mr-2">R$ </span>
+                          ) : null
+                        }}
+                      />
                     )
                   )}
                 />
@@ -165,14 +163,14 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
           </div>
           <div className="flex flex-col gap-5 w-full">
             {form.slice(3, 8).map(({ id, label, placeholder, disabled, type, defaultValue, multi }) => (
-              <div key={id} className="w-full">
+              <div key={id} className="w-full flex flex-col gap-2">
                 <Controller
                   name={id}
                   defaultValue={defaultValue as any}
                   control={control}
                   render={({ field: { value, onChange } }) => (
                     type === "select" ? (
-                      <FormControl sx={{ width: 300 }}>
+                      <FormControl>
                         <InputLabel id={id}>{label}</InputLabel>
                         <Select
                           value={value}
@@ -183,7 +181,7 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
                             updateTotalPrice(getValues("products"));
                           }}
                           error={Boolean(errors[id]?.message)}
-                          multiple
+                          multiple={multi}
                           label={label}
                           className="w-full"
                           input={<OutlinedInput label={label} />}
@@ -197,7 +195,7 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
                             ))
                           }
                           {
-                            id === "customers" && customers?.data?.map((customer: any) => (
+                            id === "customer" && customers?.data?.map((customer: any) => (
                               <MenuItem key={customer.id} value={customer.id}>
                                 {customer.name}
                               </MenuItem>

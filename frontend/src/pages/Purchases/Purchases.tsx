@@ -18,13 +18,9 @@ export const Purchases = () => {
 
   const { companyId } = AuthenticationService.getUser();
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Nome', flex: 1 },
-    { field: 'phone', headerName: 'Telefone', flex: 1 },
-    { field: 'purchases_count', headerName: 'Número de compras', flex: 1 },
-    { field: 'most_purchased', headerName: 'Produto mais comprado', flex: 1 },
-    { field: 'purchases', headerName: 'Compras feitas', flex: 1,
-      renderCell: (params) => <OpenInNew />,
-    },
+    { field: 'identifier', headerName: 'Identificador', flex: 1 },
+    { field: 'totalPrice', headerName: 'Preço total', flex: 1 },
+    { field: 'payment_method', headerName: 'Método de pagamento', flex: 1 },
     { field: 'edit',
       headerName: 'Editar',
       flex: 1,
@@ -46,8 +42,8 @@ export const Purchases = () => {
     let timeoutId: NodeJS.Timeout;
     if (data) {
       timeoutId = setTimeout(() => {
-        const filteredCustomers = data.filter((customer) => {
-          return customer.name.toLowerCase().includes(search.toLowerCase())
+        const filteredCustomers = data.filter((purchase) => {
+          return purchase.identifier.toLowerCase().includes(search.toLowerCase())
         })
         setPurchases(filteredCustomers)
       }, 500);
