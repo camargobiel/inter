@@ -1,8 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace TextilTech.Models {
   public class SellModel {
-    public required int Id { get; set; }
-    public required int ProductId { get; set; }
-    public required int CustomerId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
     public required int CompanyId { get; set; }
     public required int Quantity { get; set; }
     public required float TotalPrice { get; set; }

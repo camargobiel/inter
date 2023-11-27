@@ -1,11 +1,12 @@
 using TextilTech.Models;
+using TextilTech.Repositories.Results.CustomersRepository;
 
 namespace TextilTech.Repositories.Interfaces {
   public interface ICustomersRepository {
     Task<CustomerModel> Create(CustomerModel customer);
-    Task<CustomerModel> Read(Guid id);
-    Task<List<CustomerModel>> ReadAll();
+    Task<CustomerModel?> Read(int id);
+    Task<List<ReadAllResult>> ReadAll(int CompanyId);
     Task<CustomerModel> Update(CustomerModel customer);
-    Task<bool> Delete(Guid id);
+    Task<CustomerModel> Delete(int id);
   }
 }

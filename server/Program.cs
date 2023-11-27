@@ -12,7 +12,6 @@ namespace TextilTech {
       builder.Services.AddEndpointsApiExplorer();
       builder.Services.AddSwaggerGen();
 
-      // enable cors for locahost:3000
       builder.Services.AddCors(options => {
         options.AddPolicy("CorsPolicy", builder => builder
           .AllowAnyOrigin()
@@ -30,6 +29,8 @@ namespace TextilTech {
       builder.Services.AddScoped<IUsersRepository, UsersRepository>();
       builder.Services.AddScoped<ICompaniesRepository, CompaniesRepository>();
       builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+      builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
+      builder.Services.AddScoped<ISellsRepository, SellsRepository>();
 
       var app = builder.Build();
       app.UseSwagger();

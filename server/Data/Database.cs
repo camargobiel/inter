@@ -17,6 +17,8 @@ namespace TextilTech.Data {
       modelBuilder.ApplyConfiguration(new ProductMap());
       modelBuilder.ApplyConfiguration(new CustomerMap());
       modelBuilder.ApplyConfiguration(new SellMap());
+      modelBuilder.ApplyConfiguration(new CompanyMap());
+      modelBuilder.ApplyConfiguration(new ProductSellMap());
       base.OnModelCreating(modelBuilder);
     }
   }
