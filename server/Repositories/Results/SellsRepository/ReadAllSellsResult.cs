@@ -9,6 +9,8 @@ namespace TextilTech.Repositories.Results.SellsRepository {
     public required int CompanyId { get; set; }
     public required DateTime Date { get; set; }
     public required int CustomerId { get; set; }
+    public string? CustomerName { get; set; }
+    public string[]? ProductsNames { get; set; }
     public required List<ProductsSellModel> ProductsSells { get; set; }
   }
 }

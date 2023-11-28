@@ -6,10 +6,8 @@ using TextilTech.Repositories.Results.SellsRepository;
 namespace TextilTech.Repositories.Interfaces {
   public interface ISellsRepository {
     Task<SellModel> Create(CreateSellParams customer);
-    Task<List<ReadAllSellsResult>> ReadAll(ReadAllSellsInput? input);
-
-/*     Task<CustomerModel> Read(int id);
-    Task<CustomerModel> Update(CustomerModel customer);
-    Task<bool> Delete(int id); */
+    Task<List<ReadAllSellsResult>> ReadAll(int companyId);
+    Task<SellModel> Update(EditSellParams customer);
+    Task<SellModel?> Delete(int id);
   }
 }
