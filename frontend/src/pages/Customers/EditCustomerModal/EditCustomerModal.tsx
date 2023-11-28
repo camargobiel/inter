@@ -24,7 +24,7 @@ type EditProductModalProps = {
 
 type Data = {
   name: string;
-  phone?: string;
+  phone?: string | null;
 };
 
 export const EditProductModal = ({ open, setOpen, customer }: EditProductModalProps) => {

@@ -9,21 +9,30 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ptBR } from "@mui/x-data-grid";
 import { EditProductModal } from "./EditCustomerModal/EditCustomerModal";
 import { CustomerModel } from "../../models/CustomerModel";
+import { useNavigate } from "react-router-dom";
 
 export const Customers = () => {
   const [addCustomerModalIsOpen, setCustomerModalIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [customers, setCustomers] = useState<CustomerModel[]>([]);
   const [customerToEdit, setCustomerToEdit] = useState<CustomerModel | null>(null);
+  const navigate = useNavigate();
 
   const { companyId } = AuthenticationService.getUser();
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Nome', flex: 1 },
     { field: 'phone', headerName: 'Telefone', flex: 1 },
-    { field: 'purchases_count', headerName: 'Número de compras', flex: 1 },
-    { field: 'most_purchased', headerName: 'Produto mais comprado', flex: 1 },
+    { field: 'purchaseCount', headerName: 'Número de compras', flex: 1 },
+    { field: 'mostPurchasedProduct', headerName: 'Produto mais comprado', flex: 1 },
     { field: 'sells', headerName: 'Compras feitas', flex: 1,
-      renderCell: (params) => <OpenInNew />,
+      renderCell: (params) => <OpenInNew onClick={
+        () => navigate(`/vendas`, {
+          state: {
+            customerId: params.row.id,
+            customerName: params.row.name,
+          }
+        })
+      } />,
     },
     { field: 'edit',
       headerName: 'Editar',
@@ -39,10 +48,14 @@ export const Customers = () => {
   })
 
   useEffect(() => {
+    document.title = 'Clientes | Listagem';
+  }, [])
+
+  useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-    if (data) {
+    if (data?.length) {
       timeoutId = setTimeout(() => {
-        const filteredCustomers = data.filter((customer) => {
+        const filteredCustomers = data?.filter((customer) => {
           return customer.name.toLowerCase().includes(search.toLowerCase())
             || customer.phone?.toLowerCase().includes(search.toLowerCase())
             || customer.purchaseCount?.toString().includes(search.toLowerCase())

@@ -38,7 +38,7 @@ const MenuProps = {
 };
 
 export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
-  const { control, formState: { errors }, handleSubmit, reset, setValue, getValues } = useForm({
+  const { control, formState: { errors, isValid }, handleSubmit, reset, setValue, getValues } = useForm({
     resolver: yupResolver(validationSchema),
   })
   const user = AuthenticationService.getUser();
@@ -231,7 +231,14 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
           </div>
         </div>
         <div className="mt-10 w-full">
-          <Button type="submit" fullWidth variant="contained" color="primary" className="h-12">
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className="h-12"
+            disabled={!isValid}
+          >
             Criar
           </Button>
         </div>

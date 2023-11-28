@@ -32,7 +32,7 @@ const Login = () => {
       toast.success('Login realizado com sucesso!');
       AuthenticationService.saveToken(data.token);
       AuthenticationService.saveUser(data.user);
-      navigate("/dashboard")
+      navigate('/dashboard');
     },
     onError: (error: ApiError) => {
       if (error.response.status === 404) {

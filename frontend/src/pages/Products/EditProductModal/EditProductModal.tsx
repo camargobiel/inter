@@ -32,7 +32,7 @@ type Data = {
 };
 
 export const EditProductModal = ({ open, setOpen, product }: EditProductModalProps) => {
-  const { control, formState: { errors }, handleSubmit, reset } = useForm({
+  const { control, formState: { errors, isValid }, handleSubmit, reset } = useForm({
     resolver: yupResolver(validationSchema),
   })
   const user = AuthenticationService.getUser();
@@ -173,6 +173,7 @@ export const EditProductModal = ({ open, setOpen, product }: EditProductModalPro
               variant="contained"
               color="primary"
               className="h-12"
+              disabled={!isValid}
             >
               Confirmar
             </Button>

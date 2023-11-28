@@ -28,7 +28,7 @@ type Data = {
 };
 
 export const AddProductModal = ({ open, setOpen }: AddProductModalProps) => {
-  const { control, formState: { errors }, handleSubmit, reset } = useForm({
+  const { control, formState: { errors, isValid }, handleSubmit, reset } = useForm({
     resolver: yupResolver(validationSchema)
   })
   const user = AuthenticationService.getUser();
@@ -132,7 +132,14 @@ export const AddProductModal = ({ open, setOpen }: AddProductModalProps) => {
           </div>
         </div>
         <div className="mt-10 w-full">
-          <Button type="submit" fullWidth variant="contained" color="primary" className="h-12">
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className="h-12"
+            disabled={!isValid}
+          >
             Criar
           </Button>
         </div>

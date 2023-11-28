@@ -1,13 +1,15 @@
-import { Checkroom, ExitToApp } from "@mui/icons-material"
+import { Checkroom, ExitToApp, Home } from "@mui/icons-material"
 import theme from "../../theme"
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthenticationService } from "../../services/AuthenticationService";
 import { toast } from "react-toastify";
+import { Tooltip } from "@mui/material";
 
 const Navbar = () => {
   const routesToShowRegisterButtons = ["/login", "/cadastro", "/"];
   const location = useLocation();
   const user = AuthenticationService.getUser();
+  const navigate = useNavigate()
 
   return (
     <nav
@@ -39,24 +41,38 @@ const Navbar = () => {
             <div
               className="flex items-center gap-1"
             >
-              <p
-                className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
-                onClick={() => window.location.href = "/produtos"}
-              >
-                Produtos
-              </p>
-              <p
-                className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
-                onClick={() => window.location.href = "/clientes"}
-              >
-                Clientes
-              </p>
-              <p
-                className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
-                onClick={() => window.location.href = "/vendas"}
-              >
-                Vendas
-              </p>
+              <Tooltip title="Voltar ao dashboard">
+                <p
+                  className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  <Home />
+                </p>
+              </Tooltip>
+              <Tooltip title="Abrir a tela de produtos">
+                <p
+                  className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
+                  onClick={() => navigate("/produtos")}
+                >
+                  Produtos
+                </p>
+              </Tooltip>
+              <Tooltip title="Abrir a tela de clientes">
+                <p
+                  className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
+                  onClick={() => navigate("/clientes")}
+                >
+                  Clientes
+                </p>
+              </Tooltip>
+              <Tooltip title="Abrir a tela de vendas">
+                <p
+                  className="text-white font-bold mx-2 p-2 pt-1 pb-1 cursor-pointer"
+                  onClick={() => navigate("/vendas")}
+                >
+                  Vendas
+                </p>
+              </Tooltip>
             </div>
           </div>
           <div
@@ -69,7 +85,7 @@ const Navbar = () => {
               onClick={() => {
                 AuthenticationService.logout();
                 toast.success("Você foi deslogado com sucesso!");
-                window.location.href = "/login";
+                navigate("/login");
               }}
               className="text-white font-medium mx-2 p-2 pt-1 pb-1 cursor-pointer"
             >

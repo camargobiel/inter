@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Add, Edit, Search, ShoppingBag } from "@mui/icons-material"
 import { Button, TextField, Tooltip } from "@mui/material"
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ptBR } from "@mui/x-data-grid";
 import { EditPurchaseModal } from "./EditPurchaseModal/EditPurchaseModal";
 import { PurchaseModel } from "../../models/PurchaseModel";
+import { useLocation } from "react-router-dom";
 
 export const Purchases = () => {
   const [addPurchaseModalIsOpen, setPurchaseModalIsOpen] = useState(false);
@@ -22,6 +24,8 @@ export const Purchases = () => {
     debitCard: 'Cartão de débito',
     money: 'Dinheiro',
   }
+
+  const { state } = useLocation();
 
   const { companyId } = AuthenticationService.getUser();
   const columns: GridColDef[] = [
@@ -45,6 +49,7 @@ export const Purchases = () => {
         )
       }
     },
+    { field: 'date', headerName: 'Data', flex: 1, renderCell: (params) => new Date(params.value as string).toLocaleDateString('pt-BR')},
     { field: 'edit',
       headerName: 'Editar',
       flex: 1,
@@ -59,15 +64,20 @@ export const Purchases = () => {
   })
 
   useEffect(() => {
+    document.title = 'Vendas | Listagem';
+  }, [])
+
+  useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-    if (data) {
+    if (data?.length) {
       timeoutId = setTimeout(() => {
         const filteredCustomers = data.filter((purchase) => {
-          return purchase.identifier.toLowerCase().includes(search.toLowerCase()) ||
-            purchase.customerName.toLowerCase().includes(search.toLowerCase()) ||
-            paymentMethodsMapper[purchase.paymentMethod as keyof typeof paymentMethodsMapper].toLowerCase().includes(search.toLowerCase()) ||
-            purchase.productsNames.join(', ').toLowerCase().includes(search.toLowerCase()) ||
-            purchase.totalPrice.toString().toLowerCase().includes(search.toLowerCase())
+          return purchase.identifier?.toLowerCase().includes(search?.toLowerCase()) ||
+            purchase.customerName?.toLowerCase().includes(search?.toLowerCase()) ||
+            paymentMethodsMapper[purchase.paymentMethod as keyof typeof paymentMethodsMapper].toLowerCase().includes(search?.toLowerCase()) ||
+            purchase.productsNames?.join(', ').toLowerCase().includes(search?.toLowerCase()) ||
+            purchase.totalPrice?.toString().toLowerCase().includes(search?.toLowerCase()) ||
+            new Date(purchase.date)?.toLocaleDateString('pt-BR').toLowerCase().includes(search?.toLowerCase())
         })
         setPurchases(filteredCustomers)
       }, 500);
@@ -80,6 +90,12 @@ export const Purchases = () => {
       refetch();
     }
   }, [addPurchaseModalIsOpen, purchaseToEdit, refetch])
+
+  useEffect(() => {
+    if (state?.customerId) {
+      setSearch(state.customerName);
+    }
+  }, [state])
 
   return (
     <>

@@ -19,15 +19,11 @@ export const AllRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/produtos" element={<Products />} />
+        <Route path="/clientes" element={<Customers />} />
+        <Route path="/vendas" element={<Purchases />} />
       </Routes>
-      {user?.id && (
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/produtos" element={<Products />} />
-          <Route path="/clientes" element={<Customers />} />
-          <Route path="/vendas" element={<Purchases />} />
-        </Routes>
-      )}
     </Router>
   );
 };

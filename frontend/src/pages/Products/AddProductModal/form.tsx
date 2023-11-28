@@ -8,7 +8,7 @@ export type Form = {
 export const form: Form[] = [
   {
     id: "name",
-    label: "Nome",
+    label: "Nome*",
     placeholder: "Ex. Camiseta para corrida dry-fit"
   },
   {
@@ -23,13 +23,13 @@ export const form: Form[] = [
   },
   {
     id: "price",
-    label: "Preço",
+    label: "Preço*",
     placeholder: "Ex. R$ 28,99",
     startAdornment: <span className="text-gray-500 mr-2">R$</span>
   },
   {
     id: "category",
-    label: "Categoria",
+    label: "Categoria*",
     placeholder: "Ex. Camiseta, short, calça"
   },
   {

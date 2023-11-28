@@ -21,7 +21,7 @@ export const Products = () => {
     { field: 'name', headerName: 'Nome', flex: 1 },
     { field: 'color', headerName: 'Cor', flex: 1 },
     { field: 'size', headerName: 'Tamanho', flex: 1 },
-    { field: 'price', headerName: 'Preço', flex: 1, valueFormatter: (params) => `R$ ${params.value?.toFixed(2)}` },
+    { field: 'price', headerName: 'Preço', flex: 1, valueFormatter: (params) => `R$ ${params.value?.toFixed(2).replace(".", ",")}` },
     { field: 'category', headerName: 'Categoria', flex: 1 },
     { field: 'ncm', headerName: 'NCM', flex: 1 },
     { field: 'reference', headerName: 'Referência', flex: 1 },
@@ -37,6 +37,10 @@ export const Products = () => {
     setProducts(data);
     return data;
   })
+
+  useEffect(() => {
+    document.title = 'Produtos | Listagem';
+  }, [])
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
