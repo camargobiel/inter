@@ -55,7 +55,7 @@ namespace TextilTech.Controllers {
         return Ok(result);
       }
       catch (Exception ex) {
-        if (ex.Message == "user already exists") {
+        if (ex.Message == "USER_ALREADY_EXISTS") {
           return Conflict();
         }
         return BadRequest();

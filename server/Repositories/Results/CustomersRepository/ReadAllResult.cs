@@ -5,5 +5,6 @@ namespace TextilTech.Repositories.Results.CustomersRepository {
     public required int CompanyId { get; set; }
     public string? Phone { get; set; }
     public required int PurchaseCount { get; set; }
+    public string? MostPurchasedProduct { get; set; }
   }
 }

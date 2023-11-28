@@ -35,13 +35,37 @@ namespace TextilTech.Repositories {
           .Where(sell => sell.CompanyId == CompanyId)
           .CountAsync();
 
+        var allPurchases = await _context.Sells
+          .Where(sell => sell.CompanyId == CompanyId)
+          .Where(sell => sell.CustomerId == customer.Id)
+          .ToListAsync();
+
+        var purchases = new List<int>();
+
+        foreach (var purchase in allPurchases)
+        {
+          _context.ProductsSells
+            .Where(sellProduct => sellProduct.SellId == purchase.Id)
+            .ToList()
+            .ForEach(sellProduct => purchases.Add(sellProduct.ProductId));
+        }
+        var mostPurchasedProductId = purchases.GroupBy(purchase => purchase)
+            .OrderByDescending(group => group.Count())
+            .Select(group => group.Key)
+            .FirstOrDefault();
+
+        var mostPurchasedProduct = await _context.Products
+          .Where(product => product.Id == mostPurchasedProductId)
+          .FirstOrDefaultAsync();
+
         var result = new ReadAllResult
         {
           Id = customer.Id,
           Phone = customer.Phone,
           Name = customer.Name,
           PurchaseCount = purchaseCount,
-          CompanyId = customer.CompanyId
+          CompanyId = customer.CompanyId,
+          MostPurchasedProduct = mostPurchasedProduct?.Name
         };
 
         results.Add(result);
