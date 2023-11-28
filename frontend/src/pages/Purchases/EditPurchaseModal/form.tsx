@@ -15,15 +15,13 @@ export const form: Form[] = [
     id: "identifier",
     label: "Identificador *",
     placeholder: "Ex. 1, ABC123",
-    multi: false,
   },
   {
     id: "date",
     label: "Data*",
     placeholder: "Ex. 2021-01-01",
     type: "date",
-    defaultValue: dayjs().format("YYYY-MM-DD"),
-    multi: false,
+    defaultValue: dayjs().format("YYYY-MM-DD")
   },
   {
     id: "paymentMethod",
@@ -31,7 +29,6 @@ export const form: Form[] = [
     placeholder: "Ex. Cartão de crédito, dinheiro",
     type: "select",
     defaultValue: "creditCard",
-    multi: false,
   },
   {
     id: "products",
@@ -46,7 +43,7 @@ export const form: Form[] = [
     label: "Clientes*",
     placeholder: "Ex. Camiseta, calça, tênis",
     type: "select",
-    multi: false,
+    defaultValue: "",
   },
   {
     id: "totalPrice",
@@ -54,6 +51,5 @@ export const form: Form[] = [
     placeholder: "Ex. R$ 10,00",
     disabled: true,
     defaultValue: 0,
-    multi: false,
   },
 ]

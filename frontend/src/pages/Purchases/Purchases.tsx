@@ -1,5 +1,5 @@
-import { Add, Edit, OpenInNew, Search, ShoppingBag } from "@mui/icons-material"
-import { Button, TextField } from "@mui/material"
+import { Add, Edit, Search, ShoppingBag } from "@mui/icons-material"
+import { Button, TextField, Tooltip } from "@mui/material"
 import { useEffect, useState } from "react";
 import { AddPurchaseModal } from "./AddPurchaseModal/AddPurchaseModal";
 import { useQuery } from "react-query";
@@ -16,11 +16,35 @@ export const Purchases = () => {
   const [purchases, setPurchases] = useState<PurchaseModel[]>([]);
   const [purchaseToEdit, setPurchaseToEdit] = useState<PurchaseModel | null>(null);
 
+  const paymentMethodsMapper = {
+    pix: 'Pix',
+    creditCard: 'Cartão de crédito',
+    debitCard: 'Cartão de débito',
+    money: 'Dinheiro',
+  }
+
   const { companyId } = AuthenticationService.getUser();
   const columns: GridColDef[] = [
     { field: 'identifier', headerName: 'Identificador', flex: 1 },
-    { field: 'totalPrice', headerName: 'Preço total', flex: 1 },
-    { field: 'payment_method', headerName: 'Método de pagamento', flex: 1 },
+    { field: 'totalPrice', headerName: 'Preço total', flex: 1,
+      valueFormatter: (params) => `R$ ${params.value.toFixed(2).replace('.', ',')}`,
+    },
+    { field: 'paymentMethod', headerName: 'Método de pagamento', flex: 1,
+      valueFormatter: (params) => paymentMethodsMapper[params.value as keyof typeof paymentMethodsMapper],
+    },
+    { field: 'customerName', headerName: 'Cliente', flex: 1 },
+    { field: 'productsNames', headerName: 'Produtos', flex: 1,
+      renderCell: (params) => {
+        const productsNames = params.value as string[];
+        return (
+          <Tooltip title={productsNames.join(', ')}>
+            <span className="truncate">
+              {productsNames.length > 2 ? `${productsNames[0]}, ${productsNames[1]} e mais ${productsNames.length - 2}` : productsNames.join(', ') }
+            </span>
+          </Tooltip>
+        )
+      }
+    },
     { field: 'edit',
       headerName: 'Editar',
       flex: 1,
@@ -29,11 +53,7 @@ export const Purchases = () => {
   ]
 
   const { data, isLoading, refetch } = useQuery<PurchaseModel[]>('sells', async () => {
-    const { data } = await axios.get(`http://localhost:5000/api/sells`, {
-      data: {
-        companyId,
-      }
-    });
+    const { data } = await axios.get(`http://localhost:5000/api/sells/${companyId}`);
     setPurchases(data);
     return data;
   })
@@ -43,7 +63,11 @@ export const Purchases = () => {
     if (data) {
       timeoutId = setTimeout(() => {
         const filteredCustomers = data.filter((purchase) => {
-          return purchase.identifier.toLowerCase().includes(search.toLowerCase())
+          return purchase.identifier.toLowerCase().includes(search.toLowerCase()) ||
+            purchase.customerName.toLowerCase().includes(search.toLowerCase()) ||
+            paymentMethodsMapper[purchase.paymentMethod as keyof typeof paymentMethodsMapper].toLowerCase().includes(search.toLowerCase()) ||
+            purchase.productsNames.join(', ').toLowerCase().includes(search.toLowerCase()) ||
+            purchase.totalPrice.toString().toLowerCase().includes(search.toLowerCase())
         })
         setPurchases(filteredCustomers)
       }, 500);
@@ -100,7 +124,7 @@ export const Purchases = () => {
                 paginationModel: { page: 0, pageSize: 7 },
               },
               sorting: {
-                sortModel: [{ field: 'name', sort: 'asc' }],
+                sortModel: [{ field: 'identifier', sort: 'asc' }],
               },
             }}
             pageSizeOptions={[7]}

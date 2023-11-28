@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { AuthenticationService } from "../../../services/AuthenticationService";
+import { toast } from "react-toastify";
 
 type AddPurchaseModalProps = {
   open: boolean;
@@ -47,6 +48,7 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
       return await axios.post('http://localhost:5000/api/sells', data).then((res) => res.data);
     },
     onSuccess: () => {
+      toast.success('Venda criada com sucesso!');
       setOpen(false);
     }
   })
@@ -148,11 +150,6 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
                         className="w-full"
                         disabled={disabled}
                         type={type}
-                        InputProps={{
-                          startAdornment: id === "totalPrice" ? (
-                            <span className="text-gray-400 mr-2">R$ </span>
-                          ) : null
-                        }}
                       />
                     )
                   )}
@@ -217,6 +214,13 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
                         className="w-full"
                         disabled={disabled}
                         type={type}
+                        InputProps={
+                          {
+                            startAdornment: id === 'totalPrice' ? (
+                              <span style={{ color: "#00000061" }} className="mr-2">R$</span>
+                            ) : undefined
+                          }
+                        }
                       />
                     )
                   )}

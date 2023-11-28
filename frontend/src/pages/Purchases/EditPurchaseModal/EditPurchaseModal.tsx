@@ -13,6 +13,7 @@ import { AuthenticationService } from "../../../services/AuthenticationService";
 import { PurchaseModel } from "../../../models/PurchaseModel";
 import { RemovePurchaseConfirmationModal } from "../RemovePurchaseConfirmationModal/RemovePurchaseConfirmationModal";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 type EditPurchaseModalProps = {
   open: boolean;
@@ -24,7 +25,7 @@ type Data = {
   totalPrice: number;
   date: string;
   paymentMethod: string;
-  products: (string | undefined)[];
+  products: (number | undefined)[];
   customer: string | undefined;
   identifier: string;
 };
@@ -41,7 +42,7 @@ const MenuProps = {
 };
 
 export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModalProps) => {
-  const { control, formState: { errors }, handleSubmit, reset, setValue, getValues } = useForm({
+  const { control, formState: { errors, isValid }, handleSubmit, reset, setValue, getValues } = useForm({
     resolver: yupResolver(validationSchema),
   })
   const user = AuthenticationService.getUser();
@@ -52,7 +53,7 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
       return axios.put(`http://localhost:5000/api/sells`, data).then((res) => res.data);
     },
     onSuccess: () => {
-      toast.success('Cliente atualizado com sucesso!');
+      toast.success('Venda atualizada com sucesso!');
       setOpen(null);
     }
   })
@@ -72,8 +73,13 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
   })
 
   const defaultValues = {
-    ...purchase
-  } as any
+    identifier: purchase?.identifier,
+    customer: purchase?.customerId,
+    date: dayjs(purchase?.date).format("YYYY-MM-DD"),
+    totalPrice: purchase?.totalPrice,
+    paymentMethod: purchase?.paymentMethod,
+    products: purchase?.productsSells?.map((product) => product.productId),
+  }
 
   useEffect(() => {
     if (!open) {
@@ -83,21 +89,23 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
 
   const submit = (data: Data) => {
     mutation.mutate({
+      id: purchase?.id,
       customerId: data.customer,
       productsIds: data.products,
-      date: data.date,
+      date: dayjs(data.date).toISOString(),
       paymentMethod: data.paymentMethod,
       identifier: data.identifier,
       totalPrice: data.totalPrice,
+      companyId: user.companyId,
     } as any)
   }
 
-  const updateTotalPrice = (selectedProducts: (string | undefined)[]) => {
+  const updateTotalPrice = (selectedProducts: (number | undefined)[]) => {
     const totalPrice = selectedProducts.reduce((acc, curr) => {
-      const product = products?.data?.find((product: any) => product.id === parseInt(curr as string));
+      const product = products?.data?.find((product: any) => product.id === curr);
       return acc + (product?.price || 0);
     }, 0);
-    setValue('totalPrice', totalPrice);
+    setValue('totalPrice', totalPrice ?? 0);
   }
 
   return (
@@ -117,7 +125,7 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
         }
       }>
         <div className="flex items-center justify-between mb-10">
-          <h2 className="text-lg font-medium text-blue-600">Criar nova venda</h2>
+          <h2 className="text-lg font-medium text-blue-600">Editar venda</h2>
           <Close
             className="pointer"
             style={{
@@ -233,6 +241,13 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
                         className="w-full"
                         disabled={disabled}
                         type={type}
+                        InputProps={
+                          {
+                            startAdornment: id === 'totalPrice' ? (
+                              <span style={{ color: "#00000061" }} className="mr-2">R$</span>
+                            ) : undefined
+                          }
+                        }
                       />
                     )
                   )}
@@ -242,9 +257,26 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
             ))}
           </div>
         </div>
-        <div className="mt-10 w-full">
-          <Button type="submit" fullWidth variant="contained" color="primary" className="h-12">
-            Criar
+        <div className="mt-10 w-full flex gap-2">
+          <Button
+            variant="contained"
+            color="error"
+            className="h-12 w-40"
+            onClick={
+              () => setOpenRemovePurchaseConfirmationModal(true)
+            }
+          >
+            Excluir
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className="h-12"
+            disabled={!isValid}
+          >
+            Salvar
           </Button>
         </div>
       </form>
