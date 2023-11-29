@@ -6,6 +6,6 @@ export const validationSchema = yup.object().shape({
   size: yup.string().nullable(),
   price: yup.string().required("Preço é um campo obrigatório"),
   category: yup.string().required("Categoria é um campo obrigatório"),
-  ncm: yup.string().nullable(),
+  ncm: yup.string().nullable().required("NCM é um campo obrigatório"),
   reference: yup.string().nullable(),
 });

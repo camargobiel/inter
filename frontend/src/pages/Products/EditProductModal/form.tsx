@@ -34,7 +34,7 @@ export const form: Form[] = [
   },
   {
     id: "ncm",
-    label: "NCM",
+    label: "NCM*",
     placeholder: "Ex. 61062000"
   },
   {

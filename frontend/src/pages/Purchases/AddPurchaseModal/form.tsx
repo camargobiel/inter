@@ -40,7 +40,7 @@ export const form: Form[] = [
   },
   {
     id: "customer",
-    label: "Clientes*",
+    label: "Cliente*",
     placeholder: "Ex. Camiseta, calça, tênis",
     type: "select",
     defaultValue: "",

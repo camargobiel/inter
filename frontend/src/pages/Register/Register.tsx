@@ -8,11 +8,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import FormError from '../../components/FormError/FormError';
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { CreateUserParams } from '../../types/CreateUserParams';
 import loadingGif from '../../assets/svgs/loading.svg';
 import { toast } from 'react-toastify';
 import { ApiError } from '../../types/ApiError';
 import { useNavigate } from 'react-router-dom';
+
+type Data = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  companyName: string;
+}
 
 const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -29,10 +36,10 @@ const Register = () => {
   })
 
   const mutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: Omit<Data, "confirmPassword">) => {
       return await axios.post('http://localhost:5000/api/User', data).then((res) => res.data);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("Conta criada com sucesso!")
       navigate("/login")
     },
@@ -49,7 +56,14 @@ const Register = () => {
     document.title = 'Cadastro';
   }, []);
 
-  const submit = (data: CreateUserParams) => {
+  const submit = (data: Data) => {
+    if (data.password !== data.confirmPassword) {
+      setError("confirmPassword", {
+        message: "As senhas não coincidem"
+      })
+      return
+    }
+    console.log('data', data)
     mutation.mutate({
       name: data.name,
       email: data.email,
@@ -151,7 +165,7 @@ const Register = () => {
                 size='medium'
                 variant="outlined"
                 label="Confirmar senha*"
-                error={!!errors.password}
+                error={!!errors.confirmPassword}
                 InputProps={
                   {
                     endAdornment: (

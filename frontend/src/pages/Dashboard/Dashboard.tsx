@@ -7,9 +7,11 @@ import axios from "axios";
 import { AuthenticationService } from "../../services/AuthenticationService";
 import { PurchaseModel } from "../../models/PurchaseModel";
 import dayjs from "dayjs";
+import 'dayjs/locale/pt-br';
 
 ChartJS.register(...registerables);
 
+dayjs.locale('pt-br');
 
 export const Dashboard = () => {
   const { companyId } = AuthenticationService.getUser();
@@ -44,7 +46,7 @@ export const Dashboard = () => {
       });
 
       setCategoryData({
-        labels: categories,
+        labels: uniqueCategories,
         datasets: [
           {
             label: 'Produtos por categoria',
@@ -73,7 +75,7 @@ export const Dashboard = () => {
       return await axios.get(`http://localhost:5000/api/sells/${companyId}`);
     },
     onSuccess: ({ data }) => {
-      const sells = data.map(sell => dayjs(sell.date).format('MMMM'));
+      const sells = data.map(sell => dayjs(sell.date).format('MMMM').charAt(0).toUpperCase() + dayjs(sell.date).format('MMMM').slice(1));
       const uniqueSells = [...new Set(sells)];
       const sellsCount = uniqueSells.map(sell => {
         return {
