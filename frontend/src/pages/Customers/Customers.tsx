@@ -22,7 +22,6 @@ export const Customers = () => {
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Nome', flex: 1 },
     { field: 'phone', headerName: 'Telefone', flex: 1 },
-    { field: 'purchaseCount', headerName: 'Número de compras', flex: 1 },
     { field: 'mostPurchasedProduct', headerName: 'Produto mais comprado', flex: 1 },
     { field: 'sells', headerName: 'Compras feitas', flex: 1,
       renderCell: (params) => <OpenInNew onClick={

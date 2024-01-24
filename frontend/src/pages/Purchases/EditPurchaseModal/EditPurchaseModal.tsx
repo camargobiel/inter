@@ -95,7 +95,7 @@ export const EditPurchaseModal = ({ open, setOpen, purchase }: EditPurchaseModal
       date: dayjs(data.date).toISOString(),
       paymentMethod: data.paymentMethod,
       identifier: data.identifier,
-      totalPrice: data.totalPrice,
+      totalPrice: parseInt(data.totalPrice.toString()),
       companyId: user.companyId,
     } as any)
   }

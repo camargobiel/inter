@@ -78,7 +78,7 @@ export const AddPurchaseModal = ({ open, setOpen }: AddPurchaseModalProps) => {
       identifier: data.identifier,
       companyId: user?.companyId,
       paymentMethod: data.paymentMethod,
-      totalPrice: data.totalPrice,
+      totalPrice: parseInt(data.totalPrice.toString()),
       date: new Date(data.date).toISOString(),
       customerId: parseInt(data.customer),
       productsIds: data.products.map((id) => parseInt(id))
